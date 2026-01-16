@@ -5,14 +5,14 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# ---------------- LOGGING CONFIG ----------------
+
 logging.basicConfig(
     filename="app.log",
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
 )
 
-# ---------------- DATABASE ----------------
+
 def get_db_connection():
     conn = sqlite3.connect("productivity.db")
     conn.row_factory = sqlite3.Row
@@ -41,7 +41,7 @@ def init_db():
 
 init_db()
 
-# ---------------- HELPERS ----------------
+
 def validate_task(data):
     required_fields = ["title", "priority", "status", "deadline"]
 
@@ -63,9 +63,7 @@ def validate_task(data):
     return None
 
 
-# ---------------- ROUTES ----------------
 
-# Create Task
 @app.route("/tasks", methods=["POST"])
 def create_task():
     data = request.get_json()
@@ -106,7 +104,7 @@ def create_task():
         return jsonify({"error": "Internal server error"}), 500
 
 
-# Get All Tasks
+
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     try:
@@ -121,7 +119,7 @@ def get_tasks():
         return jsonify({"error": "Internal server error"}), 500
 
 
-# Get Single Task
+
 @app.route("/tasks/<int:task_id>", methods=["GET"])
 def get_task(task_id):
     conn = get_db_connection()
@@ -134,7 +132,7 @@ def get_task(task_id):
     return jsonify(dict(task)), 200
 
 
-# Update Task
+
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
     data = request.get_json()
@@ -174,7 +172,7 @@ def update_task(task_id):
     return jsonify({"message": "Task updated"}), 200
 
 
-# Delete Task
+
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
     conn = get_db_connection()
@@ -192,7 +190,7 @@ def delete_task(task_id):
     return jsonify({"message": "Task deleted"}), 200
 
 
-# ---------------- RUN ----------------
+
 if __name__ == "__main__":
     app.run(debug=True)
 
